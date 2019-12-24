@@ -3,28 +3,60 @@ package com.mvvm.mvvmdemo;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import com.mvvm.base.activity.BaseActivity;
+import com.mvvm.base.viewmodel.BaseViewModel;
 import com.mvvm.mvvmdemo.databinding.ActivityMainBinding;
+import com.mvvm.mvvmdemo.homefragment.HomeFragment;
+import com.mvvm.mvvmdemo.otherfragments.AccountFragment;
+import com.mvvm.mvvmdemo.otherfragments.CategoryFragment;
+import com.mvvm.mvvmdemo.otherfragments.ServiceFragment;
 
 import java.lang.reflect.Field;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import q.rorbin.badgeview.QBadgeView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding, BaseViewModel> {
 
-    ActivityMainBinding mBinding;
+    private Fragment mHomeFragment;
+    private CategoryFragment mCategoryFragment = new CategoryFragment();
+    private ServiceFragment mServiceFragment = new ServiceFragment();
+    private AccountFragment mAccountFragment = new AccountFragment();
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected BaseViewModel getViewModel() {
+        return null;
+    }
+
+    @Override
+    protected int getBindingVariable() {
+        return 0;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
-
         setSupportActionBar(mBinding.toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -34,6 +66,77 @@ public class MainActivity extends AppCompatActivity {
             disableShiftMode(mBinding.bottomView);
         }
         showBadgeView(2, 2);
+
+
+        CCResult result = CC.obtainBuilder("News").setActionName("getHomeFragment").build().call();
+        mHomeFragment = (Fragment) result.getDataMap().get("fragment");
+        fromFragment = mHomeFragment;
+
+
+        mBinding.bottomView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragCategory = null;
+                // init corresponding fragment
+                switch (item.getItemId()) {
+                    case R.id.menu_home:
+                        fragCategory = mHomeFragment;
+                        break;
+                    case R.id.menu_categories:
+                        fragCategory = mCategoryFragment;
+                        break;
+                    case R.id.menu_services:
+                        fragCategory = mServiceFragment;
+                        break;
+                    case R.id.menu_account:
+                        fragCategory = mAccountFragment;
+                        break;
+                }
+                //Set bottom menu selected item text in toolbar
+                ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    actionBar.setTitle(item.getTitle());
+                }
+                switchFragment(fromFragment, fragCategory);
+                fromFragment = fragCategory;
+                return true;
+            }
+        });
+        mBinding.bottomView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(mBinding.container.getId(), mHomeFragment);
+        transaction.commit();
+    }
+
+    Fragment fromFragment;
+
+    private void switchFragment(Fragment from, Fragment to) {
+        if (from != to) {
+            FragmentManager manger = getSupportFragmentManager();
+            FragmentTransaction transaction = manger.beginTransaction();
+            if (!to.isAdded()) {
+                if (from != null) {
+                    transaction.hide(from);
+                }
+                if (to != null) {
+                    transaction.add(R.id.container, to).commit();
+                }
+
+            } else {
+                if (from != null) {
+                    transaction.hide(from);
+                }
+                if (to != null) {
+                    transaction.show(to).commit();
+                }
+
+            }
+        }
+    }
+
+    @Override
+    protected void onRetryBtnClick() {
+
     }
 
 
@@ -54,10 +157,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (NoSuchFieldException | IllegalAccessException e) {
         }
     }
+
     /**
      * BottomNavigationView显示角标
      *
-     * @param viewIndex tab索引
+     * @param viewIndex  tab索引
      * @param showNumber 显示的数字，小于等于0是将不显示
      */
     private void showBadgeView(int viewIndex, int showNumber) {
