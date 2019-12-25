@@ -13,6 +13,7 @@ import kotlin.properties.Delegates
  * Description:
  */
 abstract class BaseApplication : MultiDexApplication() {
+
     companion object {
         @JvmStatic
         var INSTANCE: Context by Delegates.notNull()
