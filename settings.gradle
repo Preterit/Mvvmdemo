@@ -1,2 +1,2 @@
-include ':app', ':base', ':news', ':network'
+include ':app', ':base', ':news', ':network', ':kt_base'
 rootProject.name='MVVMdemo'
