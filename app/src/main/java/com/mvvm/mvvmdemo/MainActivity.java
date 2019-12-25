@@ -13,9 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.mvvm.base.activity.BaseActivity;
-import com.mvvm.base.viewmodel.BaseViewModel;
+import com.mvvm.base.viewmodel.IBaseViewModel;
 import com.mvvm.mvvmdemo.databinding.ActivityMainBinding;
-import com.mvvm.mvvmdemo.homefragment.HomeFragment;
 import com.mvvm.mvvmdemo.otherfragments.AccountFragment;
 import com.mvvm.mvvmdemo.otherfragments.CategoryFragment;
 import com.mvvm.mvvmdemo.otherfragments.ServiceFragment;
@@ -24,15 +23,13 @@ import java.lang.reflect.Field;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import q.rorbin.badgeview.QBadgeView;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, BaseViewModel> {
+public class MainActivity extends BaseActivity<ActivityMainBinding, IBaseViewModel> {
 
     private Fragment mHomeFragment;
     private CategoryFragment mCategoryFragment = new CategoryFragment();
@@ -45,7 +42,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, BaseViewMode
     }
 
     @Override
-    protected BaseViewModel getViewModel() {
+    protected IBaseViewModel getViewModel() {
         return null;
     }
 

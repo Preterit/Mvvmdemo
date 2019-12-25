@@ -15,14 +15,14 @@ import com.kingja.loadsir.core.LoadSir;
 import com.mvvm.base.loadsir.EmptyCallback;
 import com.mvvm.base.loadsir.ErrorCallback;
 import com.mvvm.base.loadsir.LoadingCallback;
-import com.mvvm.base.viewmodel.BaseViewModel;
+import com.mvvm.base.viewmodel.IBaseViewModel;
 
 /**
  * Date:2019-12-24
  * author:lwb
  * Desc:
  */
-public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity implements IBaseView{
+public abstract class BaseActivity<V extends ViewDataBinding, VM extends IBaseViewModel> extends AppCompatActivity implements IBaseView{
 
     protected VM viewModel;
     protected V mBinding;
