@@ -9,6 +9,7 @@ import com.mvvm.base.loadsir.ErrorCallback;
 import com.mvvm.base.loadsir.LoadingCallback;
 import com.mvvm.base.loadsir.TimeoutCallback;
 import com.mvvm.mvvmdemo.BuildConfig;
+import com.sdxxtop.common.receiver.ConnectivityReceiver;
 
 /**
  * @author :  lwb
@@ -33,5 +34,7 @@ public class MyApplication extends BaseApplication {
         CC.enableDebug(BuildConfig.DEBUG);
         CC.enableVerboseLog(BuildConfig.DEBUG);
         CC.enableRemoteCC(BuildConfig.DEBUG);
+
+        ConnectivityReceiver.Companion.register(this);
     }
 }

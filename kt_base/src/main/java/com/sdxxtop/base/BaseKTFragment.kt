@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders
  * Version: 1.0
  * Description:
  */
-abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel> : Fragment(), IVMView<VM> {
+abstract class BaseKTFragment<DB : ViewDataBinding, VM : ViewModel> : Fragment(), IVMView<VM> {
     companion object {
         const val TAG = "BaseFragment"
     }
@@ -24,7 +24,7 @@ abstract class BaseFragment<DB : ViewDataBinding, VM : ViewModel> : Fragment(), 
     lateinit var mBinding: DB
 
     val mViewModel: VM by lazy {
-        ViewModelProviders.of(this@BaseFragment)[vmClazz()]
+        ViewModelProviders.of(this@BaseKTFragment)[vmClazz()]
 
 //        下面这种方式是反射获取的，有时候会比较影响性能
 //        ViewModelProviders.of(this@BaseKTActivity)[getVmClass()]
